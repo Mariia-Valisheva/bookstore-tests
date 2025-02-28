@@ -1,22 +1,22 @@
 package tests.api;
 
 import org.junit.jupiter.api.Test;
-import utils.testdata.BookStoreTestData;
-import utils.model.CreateUserRequest;
-import utils.model.CreateUserResponse;
+import utils.BookStoreTestData;
+import models.CreateUserAndTokenRequest;
+import models.CreateUserResponse;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class createUserTest {
+public class CreateUserTest {
+
+    BookStoreTestData bookStoreTestData = new BookStoreTestData();
 
     @Test
     void createUserTest() {
-        BookStoreTestData bookStoreTestData = new BookStoreTestData();
-        CreateUserRequest userRequest = new CreateUserRequest();
-        userRequest.setUserName(bookStoreTestData.userName);
-        userRequest.setPassword(bookStoreTestData.password);
+
+        CreateUserAndTokenRequest userRequest = new CreateUserAndTokenRequest(bookStoreTestData.userName, bookStoreTestData.password);
 
         CreateUserResponse createUserResponse = given()
                 .log().all()
@@ -30,6 +30,6 @@ public class createUserTest {
                 .log().all()
                 .extract().as(CreateUserResponse.class);
 
-        assertThat(createUserResponse.getUserID()).isNotEmpty();
+        assertThat(createUserResponse.getUserId()).isNotEmpty();
     }
 }

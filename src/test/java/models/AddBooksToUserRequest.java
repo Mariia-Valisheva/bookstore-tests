@@ -1,4 +1,4 @@
-package utils.model;
+package models;
 
 import lombok.Data;
 
