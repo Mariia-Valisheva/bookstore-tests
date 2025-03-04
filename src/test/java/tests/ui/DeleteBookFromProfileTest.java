@@ -24,12 +24,12 @@ public class DeleteBookFromProfileTest extends TestBase {
         CreateUserAndTokenRequest authRequest = new CreateUserAndTokenRequest(userName, password);
 
         String token = authorizationApi.generateTokenResponse(authRequest).getToken();
-        String expires = authorizationApi.generateTokenResponse(authRequest).getExpires();
+       // String expires = authorizationApi.generateTokenResponse(authRequest).getExpires();
 
         open("/favicon.ico");
         getWebDriver().manage().addCookie(new Cookie("userID", userIdCookie));
         getWebDriver().manage().addCookie(new Cookie("token", token));
-        getWebDriver().manage().addCookie(new Cookie("expires", expires));
+        //getWebDriver().manage().addCookie(new Cookie("expires", expires));
 
         open("/profile");
 
