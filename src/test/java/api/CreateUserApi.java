@@ -11,6 +11,7 @@ public class CreateUserApi {
     public CreateUserResponse createUserResponse(CreateUserAndTokenRequest userRequest) {
 
         return given()
+                .log().all()
                 .body(userRequest)
                 .contentType(JSON)
 
@@ -18,6 +19,7 @@ public class CreateUserApi {
                 .post("https://demoqa.com/Account/v1/User")
 
                 .then()
+                .log().all()
                 .extract()
                 .response().as(CreateUserResponse.class);
     }

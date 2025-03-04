@@ -1,8 +1,8 @@
 package tests.api;
 
+import api.AuthorizationApi;
 import api.CreateUserApi;
 import models.CreateUserAndTokenRequest;
-import models.CreateUserResponse;
 import models.LoginResponse;
 import org.junit.jupiter.api.Test;
 import utils.BookStoreTestData;
@@ -12,16 +12,20 @@ import static io.restassured.http.ContentType.JSON;
 
 public class LoginTest {
 
-    CreateUserApi createUserApi = new CreateUserApi();
-    BookStoreTestData bookStoreTestData = new BookStoreTestData();
 
     @Test
     void loginWithNewUserTest() {
-
+        BookStoreTestData bookStoreTestData = new BookStoreTestData();
         String userName = bookStoreTestData.userName;
         String password = bookStoreTestData.password;
 
-        CreateUserResponse createUserResponse = createUserApi.createUserResponse(new CreateUserAndTokenRequest(userName, password));
+        CreateUserApi createUserApi = new CreateUserApi();
+        CreateUserAndTokenRequest createUserRequest = new CreateUserAndTokenRequest(userName, password);
+        createUserApi.createUserResponse(createUserRequest);
+
+        AuthorizationApi authorizationApi = new AuthorizationApi();
+        CreateUserAndTokenRequest generateTokenRequest = new CreateUserAndTokenRequest(userName, password);
+        authorizationApi.generateTokenResponse(generateTokenRequest);
 
         CreateUserAndTokenRequest loginRequest = new CreateUserAndTokenRequest(userName, password);
 
@@ -36,7 +40,6 @@ public class LoginTest {
                 .then()
                 .log().all()
                 .extract().as(LoginResponse.class);
-
     }
 }
 

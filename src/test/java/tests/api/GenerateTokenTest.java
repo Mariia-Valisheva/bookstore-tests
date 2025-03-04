@@ -2,6 +2,7 @@ package tests.api;
 
 import api.CreateUserApi;
 import models.CreateUserAndTokenRequest;
+import models.CreateUserResponse;
 import models.GenerateTokenResponse;
 import org.junit.jupiter.api.Test;
 import utils.BookStoreTestData;
@@ -12,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GenerateTokenTest {
 
-    CreateUserApi userAndBooks = new CreateUserApi();
+
     BookStoreTestData bookStoreTestData = new BookStoreTestData();
 
     @Test
@@ -20,9 +21,9 @@ public class GenerateTokenTest {
         String userName = bookStoreTestData.userName;
         String password = bookStoreTestData.password;
 
-        String userId = userAndBooks.createUserResponse(new CreateUserAndTokenRequest(userName, password)).getUserId();
+        CreateUserResponse createUserResponse = new CreateUserApi().createUserResponse(new CreateUserAndTokenRequest(userName, password));
 
-        CreateUserAndTokenRequest createTokenRequest = new CreateUserAndTokenRequest(userName, password);
+        CreateUserAndTokenRequest createTokenRequest = new CreateUserAndTokenRequest(createUserResponse.getUsername(), password);
 
         GenerateTokenResponse generateTokenResponse = given()
                 .log().all()

@@ -1,7 +1,6 @@
 package api;
 
 import models.CreateUserAndTokenRequest;
-import models.CreateUserResponse;
 import models.LoginResponse;
 import utils.BookStoreTestData;
 
@@ -10,15 +9,19 @@ import static io.restassured.http.ContentType.JSON;
 
 public class LoginApi {
 
-    CreateUserApi createUserApi = new CreateUserApi();
-    BookStoreTestData bookStoreTestData = new BookStoreTestData();
-
 
     public LoginResponse loginResponse() {
+        BookStoreTestData bookStoreTestData = new BookStoreTestData();
         String userName = bookStoreTestData.userName;
         String password = bookStoreTestData.password;
 
-        CreateUserResponse createUserResponse = createUserApi.createUserResponse(new CreateUserAndTokenRequest(userName, password));
+        CreateUserApi createUserApi = new CreateUserApi();
+        CreateUserAndTokenRequest createUserRequest = new CreateUserAndTokenRequest(userName, password);
+        createUserApi.createUserResponse(createUserRequest);
+
+        AuthorizationApi authorizationApi = new AuthorizationApi();
+        CreateUserAndTokenRequest generateTokenRequest = new CreateUserAndTokenRequest(userName, password);
+        authorizationApi.generateTokenResponse(generateTokenRequest);
 
         CreateUserAndTokenRequest loginRequest = new CreateUserAndTokenRequest(userName, password);
 
@@ -33,6 +36,5 @@ public class LoginApi {
                 .then()
                 .log().all()
                 .extract().as(LoginResponse.class);
-
     }
 }
