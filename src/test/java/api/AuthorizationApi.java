@@ -1,24 +1,29 @@
 package api;
 
+import io.qameta.allure.Step;
+import io.restassured.specification.ResponseSpecification;
 import models.CreateUserAndTokenRequest;
 import models.GenerateTokenResponse;
+import specs.BaseSpec;
+import specs.ApiTestBase;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
+import static specs.BaseSpec.commonRequestSpec;
 
-public class AuthorizationApi {
+public class AuthorizationApi extends ApiTestBase {
 
+    @Step("Генерируем токен")
     public GenerateTokenResponse generateTokenResponse(CreateUserAndTokenRequest userRequest) {
-        return given()
-                .log().all()
+
+        ResponseSpecification responseSpecification = new BaseSpec().commonResponseSpec(200);
+        return given(commonRequestSpec)
                 .body(userRequest)
-                .contentType(JSON)
 
                 .when()
-                .post("https://demoqa.com/Account/v1/GenerateToken")
+                .post(ApiTestBase.generateTokenPath)
 
                 .then()
-                .log().all()
+                .spec(responseSpecification)
                 .extract().as(GenerateTokenResponse.class);
     }
 }

@@ -1,15 +1,21 @@
 package api;
 
+import io.qameta.allure.Step;
+import io.restassured.specification.ResponseSpecification;
 import models.AddBooksToUserRequest;
 import models.AddBooksToUserResponse;
 import models.CollectionOfIsbnsModel;
+import specs.BaseSpec;
+import specs.ApiTestBase;
 
 import java.util.Collections;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
+import static specs.BaseSpec.commonRequestSpec;
 
-public class AddBooksToUserApi {
+public class AddBooksToUserApi extends ApiTestBase {
+
+    @Step("Добавляем книги пользователю")
     public AddBooksToUserResponse addBooksToUserResponse(String userId, String token) {
 
         AddBooksToUserRequest addBooksToUserRequest = new AddBooksToUserRequest();
@@ -21,17 +27,17 @@ public class AddBooksToUserApi {
         collectionOfIsbnsModel.setIsbn(isbn);
         addBooksToUserRequest.setCollectionOfIsbns(Collections.singletonList(collectionOfIsbnsModel));
 
-        return given()
-                .log().all()
+        ResponseSpecification responseSpecification = new BaseSpec().commonResponseSpec(201);
+
+        return given(commonRequestSpec)
                 .header("Authorization", "Bearer " + token)
                 .body(addBooksToUserRequest)
-                .contentType(JSON)
 
                 .when()
-                .post("https://demoqa.com/BookStore/v1/Books")
+                .post(ApiTestBase.getBooksPath)
 
                 .then()
-                .log().all()
+                .spec(responseSpecification)
                 .extract().as(AddBooksToUserResponse.class);
     }
 }

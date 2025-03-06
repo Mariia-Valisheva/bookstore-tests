@@ -1,20 +1,25 @@
 package api;
 
+import io.qameta.allure.Step;
+import io.restassured.specification.ResponseSpecification;
 import models.GetBooksResponse;
+import specs.BaseSpec;
+import specs.ApiTestBase;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
+import static specs.BaseSpec.commonRequestSpec;
 
-public class GetBooksApi {
+public class GetBooksApi extends ApiTestBase {
 
+    @Step("Получаем список книг")
     public GetBooksResponse getBooksResponse() {
 
-        return given()
-                .contentType(JSON)
-                .log().all()
-                .get("https://demoqa.com/BookStore/v1/Books")
+        ResponseSpecification responseSpecification = new BaseSpec().commonResponseSpec(200);
+
+        return given(commonRequestSpec)
+                .get(ApiTestBase.getBooksPath)
                 .then()
-                .log().all()
+                .spec(responseSpecification)
                 .extract().as(GetBooksResponse.class);
     }
 }

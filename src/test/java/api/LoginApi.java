@@ -1,15 +1,19 @@
 package api;
 
+import io.qameta.allure.Step;
+import io.restassured.specification.ResponseSpecification;
 import models.CreateUserAndTokenRequest;
 import models.LoginResponse;
+import specs.BaseSpec;
+import specs.ApiTestBase;
 import utils.BookStoreTestData;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
+import static specs.BaseSpec.commonRequestSpec;
 
-public class LoginApi {
+public class LoginApi extends ApiTestBase {
 
-
+    @Step("Логинимся с созданным пользователем")
     public LoginResponse loginResponse() {
         BookStoreTestData bookStoreTestData = new BookStoreTestData();
         String userName = bookStoreTestData.userName;
@@ -25,16 +29,16 @@ public class LoginApi {
 
         CreateUserAndTokenRequest loginRequest = new CreateUserAndTokenRequest(userName, password);
 
-        return given()
-                .log().all()
+        ResponseSpecification responseSpecification = new BaseSpec().commonResponseSpec(200);
+
+        return given(commonRequestSpec)
                 .body(loginRequest)
-                .contentType(JSON)
 
                 .when()
-                .post("https://demoqa.com/Account/v1/Login")
+                .post(ApiTestBase.loginPath)
 
                 .then()
-                .log().all()
+                .spec(responseSpecification)
                 .extract().as(LoginResponse.class);
     }
 }

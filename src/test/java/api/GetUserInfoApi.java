@@ -1,20 +1,26 @@
 package api;
 
+import io.qameta.allure.Step;
+import io.restassured.specification.ResponseSpecification;
 import models.GetUserInfoResponse;
+import specs.BaseSpec;
+import specs.ApiTestBase;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
+import static specs.BaseSpec.commonRequestSpec;
 
-public class GetUserInfoApi {
+public class GetUserInfoApi extends ApiTestBase {
 
+    @Step("Получаем информацию о пользователе")
     public GetUserInfoResponse getUserInfoResponse(String token, String UUID) {
-        return given()
-                .contentType(JSON)
+
+        ResponseSpecification responseSpecification = new BaseSpec().commonResponseSpec(200);
+
+        return given(commonRequestSpec)
                 .header("Authorization", "Bearer " + token)
-                .log().all()
-                .get("https://demoqa.com/Account/v1/User/" + UUID)
+                .get(ApiTestBase.getUserPath + UUID)
                 .then()
-                .log().all()
+                .spec(responseSpecification)
                 .extract().as(GetUserInfoResponse.class);
     }
 }

@@ -1,26 +1,30 @@
 package api;
 
+import io.qameta.allure.Step;
+import io.restassured.specification.ResponseSpecification;
 import models.CreateUserAndTokenRequest;
 import models.CreateUserResponse;
+import specs.BaseSpec;
+import specs.ApiTestBase;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
+import static specs.BaseSpec.commonRequestSpec;
 
-public class CreateUserApi {
+public class CreateUserApi extends ApiTestBase {
 
+    @Step("Создаем пользователя")
     public CreateUserResponse createUserResponse(CreateUserAndTokenRequest userRequest) {
 
-        return given()
-                .log().all()
+        ResponseSpecification responseSpecification = new BaseSpec().commonResponseSpec(201);
+
+        return given(commonRequestSpec)
                 .body(userRequest)
-                .contentType(JSON)
 
                 .when()
-                .post("https://demoqa.com/Account/v1/User")
+                .post(ApiTestBase.getUserPath)
 
                 .then()
-                .log().all()
-                .extract()
-                .response().as(CreateUserResponse.class);
+                .spec(responseSpecification)
+                .extract().as(CreateUserResponse.class);
     }
 }
