@@ -29,8 +29,8 @@ public class ProfilePage {
 
     @Step("Удаляем книгу из профиля")
     public ProfilePage deleteBook() {
-        deleteBookButton.click();
-        closeModalButton.click();
+        deleteBookButton.scrollTo().click();
+        closeModalButton.scrollTo().click();
         confirm();
         return this;
     }
