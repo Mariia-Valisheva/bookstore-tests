@@ -8,6 +8,7 @@ import models.CreateUserResponse;
 import models.GenerateTokenResponse;
 import models.LoginResponse;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import specs.ApiTestBase;
 import specs.BaseSpec;
@@ -18,6 +19,8 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static specs.BaseSpec.commonRequestSpec;
 
+
+@Tag("API")
 @DisplayName("Тесты на генерацию токена и логин")
 public class LoginTest extends ApiTestBase {
 

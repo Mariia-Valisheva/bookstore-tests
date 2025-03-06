@@ -21,9 +21,9 @@ public class WebDriverConfig {
 
 
             String SELENOID_HOST = System.getProperty("selenoidHost");
-            String username = "user1";
-            String password = "1234@";
-            Configuration.remote = "https://" + username + ":" + password + SELENOID_HOST + "/wd/hub";
+            String userName = System.getProperty("userName");
+            String password =  System.getProperty("password");
+            Configuration.remote = "https://" + userName + ":" + password + SELENOID_HOST + "/wd/hub";
 
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.setCapability("selenoid:options", Map.<String, Object>of(

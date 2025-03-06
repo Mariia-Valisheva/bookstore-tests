@@ -6,6 +6,7 @@ import api.GetBooksApi;
 import io.restassured.specification.ResponseSpecification;
 import models.*;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import specs.ApiTestBase;
 import specs.BaseSpec;
@@ -18,6 +19,7 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static specs.BaseSpec.commonRequestSpec;
 
+@Tag("API")
 @DisplayName("Тесты на работу с книгами")
 public class BooksTest extends ApiTestBase {
 
