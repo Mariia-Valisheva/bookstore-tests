@@ -4,9 +4,10 @@ import api.AddBooksToUserApi;
 import api.DeleteUserApi;
 import api.GetUserInfoApi;
 import api.LoginApi;
-import helpers.AddCookie;
+import helpers.CookieHelper;
 import models.GetUserInfoResponse;
 import models.LoginResponse;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class DeleteBookFromProfileTest extends TestBase {
         AddBooksToUserApi addBooksToUserApi = new AddBooksToUserApi();
         addBooksToUserApi.addBooksToUserResponse(loginData.getUserId(), loginData.getToken());
 
-        AddCookie addCookie = new AddCookie().addCookie(loginData.getUserId(), loginData.getToken(), loginData.getExpires());
+        CookieHelper.addLoginCookie(loginData.getUserId(), loginData.getToken(), loginData.getExpires());
 
         profilePage
                 .openProfilePage("/profile")
@@ -50,7 +51,10 @@ public class DeleteBookFromProfileTest extends TestBase {
 
         DeleteUserApi deleteUserApi = new DeleteUserApi();
         Response response = deleteUserApi.deleteUserResponse(loginData.getToken(), loginData.getUserId());
-        assertThat(response.asString()).isEmpty();
-        assertThat(response.statusCode()).isEqualTo(204);
+        SoftAssertions.assertSoftly(
+                softAssertions -> {
+                    assertThat(response.asString()).isEmpty();
+                    assertThat(response.statusCode()).isEqualTo(204);
+                });
     }
 }
